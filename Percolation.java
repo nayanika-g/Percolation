@@ -10,7 +10,6 @@ public class Percolation {
 
     private final int num;
     private int[][] grid;
-    private boolean[] bottomFullStates;
     private int bottom1DIndex;
     private final WeightedQuickUnionUF quickUnionUF;
     private int numOpenSites;
@@ -26,10 +25,6 @@ public class Percolation {
         numOpenSites = 0;
         quickUnionUF = new WeightedQuickUnionUF((num * num) + 2);
         bottom1DIndex = (num * num) + 1;
-        bottomFullStates = new boolean[num];
-        for (int i = 0; i < num; i++) {
-            bottomFullStates[i] = false;
-        }
         grid = new int[num][num];
         for (int i = 0; i < num; i++) {
             for (int j = 0; j < num; j++) {
@@ -69,10 +64,6 @@ public class Percolation {
                 // if bottom, connect to virtual bottom site
                 quickUnionUF.union(index1D, bottom1DIndex);
             }
-            if (quickUnionUF.connected(0, bottom1DIndex)) {   // if a bottom cell is full, update
-                // update boolean array
-                bottomFullStates[col - 1] = true;
-            }
         }
     }
 
@@ -87,7 +78,8 @@ public class Percolation {
             return ((quickUnionUF.connected(0, xyto1D(row, col))));
         }
         else {
-            return (bottomFullStates[col - 1]);
+            return ((quickUnionUF.connected(0, xyto1D(row, col))) && (quickUnionUF
+                    .connected(0, xyto1D(row - 1, col))));
         }
         // return ((quickUnionUF.connected(0, xyto1D(row, col))));
     }
@@ -122,76 +114,12 @@ public class Percolation {
         return true;
     }
 
-    public void printBooleans() {
-        for (int i = 0; i < bottomFullStates.length; i++) {
-            System.out.println(bottomFullStates[i]);
-        }
-    }
-
-
     public static void main(String[] args) {
 
-        Percolation p = new Percolation(10);
-        p.open(10, 2);
-        p.open(2, 10);
-        p.open(6, 8);
-        p.open(2, 6);
-        p.open(1, 4);
-        p.open(8, 4);
-        p.open(10, 1);
-        p.open(4, 2);
-        p.open(4, 8);
-        p.open(9, 3);
-        p.open(2, 2);
-        p.open(9, 1);
-        p.open(4, 3);
-        p.open(5, 5);
-        p.open(5, 7);
-        p.open(2, 8);
-        p.open(6, 4);
-        p.open(7, 5);
-        p.open(9, 6);
-        p.open(3, 7);
-        p.open(4, 7);
-        p.open(7, 1);
-        p.open(9, 4);
-        p.open(3, 10);
-        p.open(1, 10);
-        p.open(10, 10);
-        p.open(9, 7);
-        p.open(1, 5);
-        p.open(9, 8);
-        p.open(6, 1);
-        p.open(2, 5);
-        p.open(3, 4);
-        p.open(6, 9);
-        p.open(5, 8);
-        p.open(3, 2);
-        p.open(4, 6);
-        p.open(1, 7);
-        p.open(7, 9);
-        p.open(3, 9);
-        p.open(4, 4);
-        p.open(4, 10);
-        p.open(3, 5);
-        p.open(3, 8);
-        p.open(1, 8);
-        p.open(3, 1);
-        p.open(6, 7);
-        p.open(2, 3);
-        p.open(7, 4);
-        p.open(9, 10);
-        p.open(7, 6);
-        p.open(5, 2);
-        p.open(8, 3);
-        p.open(10, 8);
-        p.open(7, 10);
-        p.open(4, 5);
-        p.open(8, 10);
+        // Percolation p = new Percolation(10);
 
-        p.printBooleans();
 
-        System.out.println("All tests passed");
+        // System.out.println("All tests passed");
 
     }
 
